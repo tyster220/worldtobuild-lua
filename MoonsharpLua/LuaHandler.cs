@@ -304,6 +304,8 @@ public class LuaHandler : MonoBehaviour {
 
         luaScript.Globals["IsHost"] = PhotonNetwork.isMasterClient;
 
+        luaScript.Globals["loadstring"] = (System.Action<string>)LoadLuaString;
+
         luaScript.Globals["Time"] = new LuaTime();
         luaScript.Globals["File"] = new LuaFile();
         luaScript.Globals["Game"] = new LuaGame();
@@ -379,6 +381,11 @@ public class LuaHandler : MonoBehaviour {
     }
 
 
+
+    public void LoadLuaString(string _lua)
+    {
+        luaScript.LoadString(_lua);
+    }
 
     [BluaMethod(description = "Shares a table of data to other players in the room", scriptSide = ScriptSide.Server)]
     public void ShareHostData(Table data)
