@@ -314,6 +314,8 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals["SetCameraMode"] = (System.Action<string>)SetCameraMode;
         luaScript.Globals["SetCameraLock"] = (System.Action<bool>)SetCameraLock;
 
+        luaScript.Globals["GetCameraPosition"] = (System.Func<Vector3>)GetCameraPosition;
+
         luaScript.Globals["Explode"] = (Action<Vector3, float, float, bool, bool>)Explode;
 
         luaScript.Globals["SetParent"] = (System.Action<LuaWTBObject, LuaWTBObject>)SetParent;
@@ -1167,6 +1169,12 @@ public class LuaHandler : MonoBehaviour {
 
                 break;
         }
+    }
+
+    [BluaMethod(description = "Returns the main camera position", scriptSide = ScriptSide.Any)]
+    public Vector3 GetCameraPosition()
+    {
+        return Camera.main.transform.position;
     }
 }
 
