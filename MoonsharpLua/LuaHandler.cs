@@ -64,6 +64,17 @@ public static class LuaGlobalEnvironment
 
         hasBeenRegistered = true;
     }
+
+
+
+
+    public static void CallOnScript(LuaScript _luaScript, string _functionName, params object[] _args)
+    {
+        if (_luaScript != null && _luaScript.Globals[_functionName] != null)
+        {
+            _luaScript.Call(_luaScript.Globals[_functionName], _args);
+        }
+    }
 }
 
 public class LuaHandler : MonoBehaviour {
