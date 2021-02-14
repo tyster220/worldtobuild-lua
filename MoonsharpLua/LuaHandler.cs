@@ -280,7 +280,9 @@ public class LuaHandler : MonoBehaviour {
 
         // see: https://www.moonsharp.org/sandbox.html
         // use softsandbox now, this includes all core modules except LoadMethods, OS_System, IO, and Debug, with which users have unlimited access to the system.
-        luaScript = new Script(CoreModules.Preset_SoftSandbox | CoreModules.LoadMethod);
+        luaScript = new Script(CoreModules.Preset_SoftSandbox | CoreModules.LoadMethods);
+
+        luaScript.Globals["dostring"] = (System.Action<string>)LoadLuaString;
 
         DynValue vec2 = UserData.Create(new Vector2());
         luaScript.Globals.Set("Vector2", vec2);
@@ -303,8 +305,6 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals.Set("This", UserData.Create(Task.GetOrMakeLuaPart(GetComponent<WTBObject>())));
 
         luaScript.Globals["IsHost"] = PhotonNetwork.isMasterClient;
-
-        luaScript.Globals["loadstring"] = (System.Action<string>)LoadLuaString;
 
         luaScript.Globals["Time"] = new LuaTime();
         luaScript.Globals["File"] = new LuaFile();
@@ -380,11 +380,9 @@ public class LuaHandler : MonoBehaviour {
         Task.LuaHandlers.Add(this);
     }
 
-
-
     public void LoadLuaString(string _lua)
     {
-        luaScript.LoadString(_lua);
+        luaScript.DoString(_lua);
     }
 
     [BluaMethod(description = "Shares a table of data to other players in the room", scriptSide = ScriptSide.Server)]
