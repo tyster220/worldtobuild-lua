@@ -151,10 +151,7 @@ public class LuaHandler : MonoBehaviour {
                 luaScript.DoString(Task.ScriptTextTable[scriptName] + builtInEnvironment);
             }
 
-            if (luaScript != null && luaScript.Globals["Start"] != null)
-            {
-                luaScript.Call(luaScript.Globals["Start"]);
-            }
+            LuaGlobalEnvironment.CallOnScript(luaScript, "Start");
 
             hasRun = true;
         }
@@ -893,21 +890,14 @@ public class LuaHandler : MonoBehaviour {
     [BluaMethod(description = "This is called once each frame", scriptSide = ScriptSide.Any)]
     public void Update()
     {
-        if (luaScript != null
-            && luaScript.Globals["Update"] != null)
-        {
-            luaScript.Call(luaScript.Globals["Update"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "Update");
 
         // so we dont run into dictionary isssues, mark the ones we are going to delete until after the loop
         List<string> keysForRemoval = new List<string>();
 
         foreach(var timer in timersToEndNextFrame.ToArray())
         {
-            if (luaScript != null && luaScript.Globals["TimerEnd"] != null)
-            {
-                luaScript.Call(luaScript.Globals["TimerEnd"], timer);
-            }
+            LuaGlobalEnvironment.CallOnScript(luaScript, "TimerEnd", timer);
             timersToEndNextFrame.Remove(timer);
         }
 
@@ -929,26 +919,20 @@ public class LuaHandler : MonoBehaviour {
     {
         if (luaScript != null && luaScript.Globals["Awake"] != null)
         {
-            luaScript.Call(luaScript.Globals["Awake"]);
+            LuaGlobalEnvironment.CallOnScript(luaScript, "Awake");
         }
     }
 
     [BluaMethod(description = "This is called once every physics frame", scriptSide = ScriptSide.Any)]
     public void FixedUpdate()
     {
-        if (luaScript != null && luaScript.Globals["FixedUpdate"] != null)
-        {
-            luaScript.Call(luaScript.Globals["FixedUpdate"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "FixedUpdate");
     }
 
     [BluaMethod(description = "This is called once at the end of each frame", scriptSide = ScriptSide.Any)]
     public void LateUpdate()
     {
-        if (luaScript != null && luaScript.Globals["DrawUpdate"] != null)
-        {
-            luaScript.Call(luaScript.Globals["DrawUpdate"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "DrawUpdate");
     }
 
     [BluaMethod(description = "This is called when another object collides with this one", scriptSide = ScriptSide.Any,
@@ -1041,46 +1025,31 @@ public class LuaHandler : MonoBehaviour {
     [BluaMethod(description = "This is called when your mouse hovers this object", scriptSide = ScriptSide.Client)]
     public void OnMouseEnter()
     {
-        if (luaScript != null && luaScript.Globals["MouseEnter"] != null)
-        {
-            luaScript.Call(luaScript.Globals["MouseEnter"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "MouseEnter");
     }
 
     [BluaMethod(description = "This is called when your mouse stops hovering this object", scriptSide = ScriptSide.Client)]
     public void OnMouseExit()
     {
-        if (luaScript != null && luaScript.Globals["MouseExit"] != null)
-        {
-            luaScript.Call(luaScript.Globals["MouseExit"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "MouseExit");
     }
 
     [BluaMethod(description = "This is called when your mouse clicks this object", scriptSide = ScriptSide.Client)]
     public void OnMouseDown()
     {
-        if (luaScript != null && luaScript.Globals["MouseDown"] != null)
-        {
-            luaScript.Call(luaScript.Globals["MouseDown"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "MouseDown");
     }
 
     [BluaMethod(description = "This is called when your mouse button is released over this object", scriptSide = ScriptSide.Client)]
     public void OnMouseUp()
     {
-        if (luaScript != null && luaScript.Globals["MouseUp"] != null)
-        {
-            luaScript.Call(luaScript.Globals["MouseUp"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "MouseUp");
     }
 
     [BluaMethod(description = "This is called when your mouse button is released over this object", scriptSide = ScriptSide.Client)]
     public void OnMouseUpAsButton()
     {
-        if (luaScript != null && luaScript.Globals["MouseClick"] != null)
-        {
-            luaScript.Call(luaScript.Globals["MouseClick"]);
-        }
+        LuaGlobalEnvironment.CallOnScript(luaScript, "MouseClick");
     }
 }
 
