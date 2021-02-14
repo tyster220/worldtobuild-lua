@@ -29,6 +29,26 @@ public class LuaWTBObject: LuaObject
         }
     }
 
+    [BluaMethod(description = "Converts a position relative to this {object} to world space.", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(Vector3)
+        })]
+    public Vector3 LocalPositionToWorld(Vector3 _point)
+    {
+        return WTBObject.transform.TransformPoint(_point);
+    }
+
+    [BluaMethod(description = "Converts a world space position to a position relative to this {object}", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(Vector3)
+        })]
+    public Vector3 WorldPositionToLocal(Vector3 _point)
+    {
+        return WTBObject.transform.InverseTransformPoint(_point);
+    }
+
     [BluaProperty(description = "The scripts on this {object}")]
     public List<AccessibleLuaScript> scripts
     {
