@@ -35,15 +35,6 @@ public class LuaPlayer: LuaObject
         return playerConnection.IsMasterClient;
     }
 
-    [BluaProperty(description = "The UserID of the {object}")]
-    public int WTBID
-    {
-        get
-        {
-            return playerConnection.UserID;
-        }
-    }
-
     float? originalAddedGravity = null;
     [BluaProperty(description = "Whether or not this {object} is affected by gravity")]
     public bool gravityEnabled
@@ -76,8 +67,17 @@ public class LuaPlayer: LuaObject
     }
     bool _gravityEnabled = true;
 
-    [BluaProperty(description = "The network ID of the {object}")]
+    [BluaProperty(description = "The network ID of the {object}", deprecated = true, deprecatedMessage = "Please use the netID property instead")]
     public int id
+    {
+        get
+        {
+            return this.netID;
+        }
+    }
+
+    [BluaProperty(description = "The network ID of the {object}")]
+    public int netID
     {
         get
         {
@@ -104,6 +104,15 @@ public class LuaPlayer: LuaObject
             {
                 return -1;
             }
+        }
+    }
+
+    [BluaProperty(description = "The user ID of the {object}")]
+    public int userID
+    {
+        get
+        {
+            return playerConnection.UserID;
         }
     }
 
@@ -135,6 +144,15 @@ public class LuaPlayer: LuaObject
         get
         {
             return playerObject.GetComponent<PhotonView>().owner.Nickname;
+        }
+    }
+
+    [BluaProperty(description = "The username of the {object}")]
+    public string username
+    {
+        get
+        {
+            return playerObject.GetComponent<PhotonView>().owner.Username;
         }
     }
 
