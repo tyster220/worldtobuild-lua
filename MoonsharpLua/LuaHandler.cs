@@ -72,6 +72,7 @@ public static class LuaGlobalEnvironment
 
         UserData.RegisterType<LuaTime>();
         UserData.RegisterType<LuaFile>();
+        UserData.RegisterType<LuaGame>();
 
         UserData.RegisterType<LuaLight>();
         UserData.RegisterType<LuaParticleSystem>();
@@ -305,6 +306,7 @@ public class LuaHandler : MonoBehaviour {
 
         luaScript.Globals["Time"] = new LuaTime();
         luaScript.Globals["File"] = new LuaFile();
+        luaScript.Globals["Game"] = new LuaGame();
 
         luaScript.Globals["newVector2"] = (System.Func<float, float, Vector2>)newVector2;
         luaScript.Globals["newVector3"] = (System.Func<float, float, float, Vector3>)newVector3;
