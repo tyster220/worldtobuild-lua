@@ -316,6 +316,17 @@ public class LuaWTBObject: LuaObject
         }
     }
 
+    [BluaProperty(description = "Returns the string text of the script running on this {object}")]
+    public string scriptText
+    {
+        get
+        {
+            return Task.ScriptTextTable[scriptName];
+        }
+    }
+
+
+
     [BluaProperty(description = "Returns the position of this {object}")]
     public Vector3 position
     {
