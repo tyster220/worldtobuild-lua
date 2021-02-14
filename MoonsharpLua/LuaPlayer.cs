@@ -526,4 +526,10 @@ public class LuaPlayer: LuaObject
             Task.handler.photonView.RPC("RPCReceiveLuaPlayerBrakingPower", playerObject.GetPhotonView().owner, brakingpower);
         }
     }
+
+    [BluaMethod(description = "Respawns the {object} at a random respawn location")]
+    public void Respawn()
+    {
+        playerConnection.RespawnGeneric();
+    }
 }
