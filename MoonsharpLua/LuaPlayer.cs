@@ -165,7 +165,7 @@ public class LuaPlayer: LuaObject
         }
         set
         {
-            NametagController.instance.SetNametagHidden(playerObject.GetComponent<PhotonView>().owner, value);
+            NametagController.instance.SetNametagHidden(playerObject.GetComponent<PhotonView>().owner, !value);
         }
     }
 
