@@ -7,7 +7,7 @@ public class LuaGame
 	{
 	}
 
-    [BluaProperty]
+    [BluaProperty(description = "Get or set the gravity multiplier")]
     public float gravity
     {
         get
@@ -20,7 +20,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Get or set the maximum number of jumps")]
     public int maxJumps
     {
         get
@@ -33,7 +33,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Get or set the jump power")]
     public float jumpPower
     {
         get
@@ -46,7 +46,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Returns the ID of the current world")]
     public int worldID
     {
         get
@@ -55,7 +55,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Returns the name of the current world")]
     public string worldName
     {
         get
@@ -64,7 +64,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Returns the owner user ID of the current world")]
     public int ownerID
     {
         get
@@ -73,7 +73,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Returns the maximum player capacity for the server")]
     public int maxPlayers
     {
         get
@@ -82,7 +82,7 @@ public class LuaGame
         }
     }
 
-    [BluaProperty]
+    [BluaProperty(description = "Returns true if the player was started with test mode")]
     public bool isTestMode
     {
         get
