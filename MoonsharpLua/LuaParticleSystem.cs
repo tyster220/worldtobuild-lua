@@ -88,7 +88,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "How long each particle lasts")]
-    public float runtime
+    public float runTime
     {
         get
         {
@@ -114,7 +114,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "The spray size")]
-    public float spraysize
+    public float spraySize
     {
         get
         {
@@ -127,7 +127,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "The angle that particles come out of this {object} from")]
-    public float sprayangle
+    public float sprayAngle
     {
         get
         {
@@ -140,7 +140,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "The starting size of each particle")]
-    public float startsize
+    public float startSize
     {
         get
         {
@@ -153,7 +153,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "The ending size of each particle")]
-    public float endsize
+    public float endSize
     {
         get
         {
@@ -166,7 +166,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "The starting color of each particle")]
-    public Color startcolor
+    public Color startColor
     {
         get
         {
@@ -181,7 +181,7 @@ public class LuaParticleSystem: LuaObject
     }
 
     [BluaProperty(description = "The ending color of each particle")]
-    public Color endcolor
+    public Color endColor
     {
         get
         {

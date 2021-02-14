@@ -41,7 +41,7 @@ public class LuaLight: LuaObject
     }
 
     [BluaProperty(description = "The type of light coming from this {object}")]
-    public int lighttype
+    public int lightType
     {
         get
         {

@@ -131,7 +131,7 @@ public class LuaWTBObject: LuaObject
     }
 
     [BluaProperty(description = "The number of children on this {object}")]
-    public int childcount
+    public int childCount
     {
         get
         {
@@ -361,7 +361,7 @@ public class LuaWTBObject: LuaObject
     }
 
     [BluaProperty(description = "Returns the screen position of this {object}")]
-    public Vector3 screenposition
+    public Vector3 screenPosition
     {
         get
         {
@@ -560,7 +560,7 @@ public class LuaWTBObject: LuaObject
     }
 
     [BluaProperty(description = "Returns whether or not this {object} can collide with other objects")]
-    public bool cancollide
+    public bool canCollide
     {
         get
         {

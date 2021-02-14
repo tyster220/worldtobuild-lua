@@ -279,7 +279,7 @@ public class LuaPlayer: LuaObject
     }
 
     [BluaProperty(description = "The screen position of this {object}")]
-    public Vector2 screenposition
+    public Vector2 screenPosition
     {
         get
         {
@@ -461,7 +461,7 @@ public class LuaPlayer: LuaObject
     }
 
     [BluaProperty(description = "If set to false, the {object} will not collide with other objects")]
-    public bool cancollide
+    public bool canCollide
     {
         get
         {
@@ -506,7 +506,7 @@ public class LuaPlayer: LuaObject
     }
 
     [BluaProperty(description = "How fast the {object} can stop movement")]
-    public float brakingpower
+    public float brakingPower
     {
         get
         {

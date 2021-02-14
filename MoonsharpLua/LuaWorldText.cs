@@ -120,7 +120,7 @@ public class LuaWorldText : LuaObject
     }
 
     [BluaProperty(description = "The outline color of the text. Must have outline set to true")]
-    public Color outlinecolor
+    public Color outlineColor
     {
         get
         {
@@ -133,7 +133,7 @@ public class LuaWorldText : LuaObject
     }
 
     [BluaProperty(description = "The outline width of the text. Must have outline set to true")]
-    public float outlinewidth
+    public float outlineWidth
     {
         get
         {
@@ -146,7 +146,7 @@ public class LuaWorldText : LuaObject
     }
 
     [BluaProperty(description = "If set to true, the text will always face the camera")]
-    public bool facecamera
+    public bool faceCamera
     {
         get
         {
