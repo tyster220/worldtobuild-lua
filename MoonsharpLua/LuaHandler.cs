@@ -319,6 +319,9 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals["NetworkSendToPlayer"] = (System.Action<string, Table, LuaPlayer>)NetworkSendToPlayer;
         luaScript.Globals["NetworkSendToHost"] = (System.Action<string, Table>)NetworkSendToHost;
 
+        luaScript.Globals["HTTPRequestGet"] = (System.Action<string>)HTTPRequestGet;
+        luaScript.Globals["HTTPRequestPost"] = (System.Action<string>)HTTPRequestPost;
+
         luaScript.Globals["InputPressed"] = (System.Func<string, bool>)InputPressed;
         luaScript.Globals["InputHeld"] = (System.Func<string, bool>)InputHeld;
         luaScript.Globals["InputReleased"] = (System.Func<string, bool>)InputReleased;
@@ -1050,6 +1053,89 @@ public class LuaHandler : MonoBehaviour {
     public void OnMouseUpAsButton()
     {
         LuaGlobalEnvironment.CallOnScript(luaScript, "MouseClick");
+    }
+
+    [BluaMethod(description = "Sends an HTTP GET to the given URL string. OnWebResponse(string) will be called on return.", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(string)
+        })])]
+    public void HTTPRequestGet(string url)
+    {
+        StartCoroutine(HTTPRequest("GET", url, null));
+    }
+
+    [BluaMethod(description = "Sends an HTTP POST to the given URL string. OnWebResponse(string) will be called on return. Table should contain string Key - string Value pairs", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(string),
+            typeof(Table)
+        })])]
+    public void HTTPRequestPost(string url, Table _form)
+    {
+        StartCoroutine(HTTPRequest("POST", url, _form));
+    }
+
+    // not directly used by lua
+    public IEnumerator HTTPRequest(string type, string url, Table _form)
+    {
+
+        switch (type)
+        {
+            case "GET":
+
+                using (UnityWebRequest www = UnityWebRequest.Get(url))
+                {
+
+                    yield return www.SendWebRequest();
+
+                    if (www.isNetworkError || www.isHttpError)
+                    {
+                        Debug.LogWarning("Web request error: " + www.error);
+                    }
+                    else
+                    {
+                        if (luaScript != null && luaScript.Globals["OnWebResponse"] != null)
+                        {
+                            luaScript.Call(luaScript.Globals["OnWebResponse"], www.downloadHandler.text);
+                        }
+                    }
+                }
+
+                break;
+
+            case "POST":
+
+                WWWForm form = new WWWForm();
+
+                foreach (var entry in _form.Pairs)
+                {
+                    if (entry.Key.String is string)
+                    {
+                        form.AddField(entry.Key.String, entry.Value.String);
+                    }
+                }
+
+                using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+                {
+
+                    yield return www.SendWebRequest();
+
+                    if (www.isNetworkError || www.isHttpError)
+                    {
+                        Debug.LogWarning("Web request error: " + www.error);
+                    }
+                    else
+                    {
+                        if (luaScript != null && luaScript.Globals["OnWebResponse"] != null)
+                        {
+                            luaScript.Call(luaScript.Globals["OnWebResponse"], www.downloadHandler.text);
+                        }
+                    }
+                }
+
+                break;
+        }
     }
 }
 
