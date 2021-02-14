@@ -8,6 +8,11 @@ using MoonSharp.Interpreter.CoreLib;
 
 public static class Vector3Extended
 {
+    [BluaMethod(description = "Converts a world space vector to screen space.", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(Vector3)
+        })]
     public static Vector2 ScreenPosition(this Vector3 _vec)
     {
         Vector2 reasonableVector = Camera.main.WorldToScreenPoint(_vec);
