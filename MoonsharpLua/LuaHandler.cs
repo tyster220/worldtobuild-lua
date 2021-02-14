@@ -958,16 +958,16 @@ public class LuaHandler : MonoBehaviour {
         })]
     public void OnCollisionEnter(Collision collision)
     {
-        if (luaScript != null && luaScript.Globals["StartCollision"] != null)
+        if (collision.gameObject.tag == "Player")
+        {
+            LuaGlobalEnvironment.LuaCallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPlayer(collision.gameObject));
+        }
+        else
         {
             WTBObject WTBO = collision.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                luaScript.Call(luaScript.Globals["StartCollision"], Task.GetOrMakeLuaPart(WTBO));
-            }
-            else if (collision.gameObject.tag == "Player")
-            {
-                luaScript.Call(luaScript.Globals["StartCollision"], Task.GetOrMakeLuaPlayer(collision.gameObject));
+                LuaGlobalEnvironment.LuaCallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -979,16 +979,16 @@ public class LuaHandler : MonoBehaviour {
         })]
     public void OnCollisionExit(Collision collision)
     {
-        if (luaScript != null && luaScript.Globals["EndCollision"] != null)
+        if (collision.gameObject.tag == "Player")
+        {
+            LuaGlobalEnvironment.LuaCallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPlayer(collision.gameObject));
+        }
+        else
         {
             WTBObject WTBO = collision.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                luaScript.Call(luaScript.Globals["EndCollision"], Task.GetOrMakeLuaPart(WTBO));
-            }
-            else if (collision.gameObject.tag == "Player")
-            {
-                luaScript.Call(luaScript.Globals["EndCollision"], Task.GetOrMakeLuaPlayer(collision.gameObject));
+                LuaGlobalEnvironment.LuaCallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -1003,16 +1003,16 @@ public class LuaHandler : MonoBehaviour {
         })]
     public void OnTriggerEnter(Collider collider)
     {
-        if (luaScript != null && luaScript.Globals["StartCollision"] != null)
+        if (collider.gameObject.tag == "Player")
+        {
+            Task.LuaCallOnScript(this, "StartCollision", Task.GetOrMakeLuaPlayer(collider.gameObject));
+        }
+        else
         {
             WTBObject WTBO = collider.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                luaScript.Call(luaScript.Globals["StartCollision"], Task.GetOrMakeLuaPart(WTBO));
-            }
-            else if (collider.gameObject.tag == "Player")
-            {
-                luaScript.Call(luaScript.Globals["StartCollision"], Task.GetOrMakeLuaPlayer(collider.gameObject));
+                Task.LuaCallOnScript(this, "StartCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -1024,16 +1024,16 @@ public class LuaHandler : MonoBehaviour {
         })]
     public void OnTriggerExit(Collider collider)
     {
-        if (luaScript != null && luaScript.Globals["EndCollision"] != null)
+        if (collider.gameObject.tag == "Player")
+        {
+            Task.LuaCallOnScript(this, "EndCollision", Task.GetOrMakeLuaPlayer(collider.gameObject));
+        }
+        else
         {
             WTBObject WTBO = collider.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                luaScript.Call(luaScript.Globals["EndCollision"], Task.GetOrMakeLuaPart(WTBO));
-            }
-            else if (collider.gameObject.tag == "Player")
-            {
-                luaScript.Call(luaScript.Globals["EndCollision"], Task.GetOrMakeLuaPlayer(collider.gameObject));
+                Task.LuaCallOnScript(this, "EndCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
