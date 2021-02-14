@@ -240,7 +240,7 @@ public class LuaHandler : MonoBehaviour {
 
         // see: https://www.moonsharp.org/sandbox.html
         // use softsandbox now, this includes all core modules except LoadMethods, OS_System, IO, and Debug, with which users have unlimited access to the system.
-        luaScript = new Script(CoreModules.Preset_SoftSandbox);
+        luaScript = new Script(CoreModules.Preset_SoftSandbox | CoreModules.LoadMethod);
 
         DynValue vec2 = UserData.Create(new Vector2());
         luaScript.Globals.Set("Vector2", vec2);
