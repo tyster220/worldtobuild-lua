@@ -280,7 +280,7 @@ public class LuaHandler : MonoBehaviour {
 
         // see: https://www.moonsharp.org/sandbox.html
         // use softsandbox now, this includes all core modules except LoadMethods, OS_System, IO, and Debug, with which users have unlimited access to the system.
-        luaScript = new Script(CoreModules.Preset_SoftSandbox | CoreModules.LoadMethods);
+        luaScript = new Script(CoreModules.Preset_SoftSandbox);
 
         luaScript.Globals["dostring"] = (System.Action<string>)LoadLuaString;
 
