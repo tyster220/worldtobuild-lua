@@ -14,6 +14,32 @@ public static class Vector3Extended
         reasonableVector.y = -reasonableVector.y;
         return reasonableVector;
     }
+
+    [BluaMethod(description = "Converts a screen space vector to world space.", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(Vector3)
+        })]
+    public static Vector3 WorldPosition(this Vector3 _vec)
+    {
+        Vector2 reasonableVector = _vec;
+        _vec.y = -_vec.y;
+
+        return Camera.main.ScreenToWorldPoint(_vec);
+    }
+
+    [BluaMethod(description = "Converts a screen space vector to world space.", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(Vector3)
+        })]
+    public static Vector3 WorldPosition(this Vector2 _vec)
+    {
+        Vector2 reasonableVector = _vec;
+        _vec.y = -_vec.y;
+
+        return Camera.main.ScreenToWorldPoint(_vec);
+    }
 }
 
 public static class LuaGlobalEnvironment
