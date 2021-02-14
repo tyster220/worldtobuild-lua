@@ -13,7 +13,7 @@ public static class Vector3Extended
         {
             typeof(Vector3)
         })]
-    public static Vector2 ScreenPosition(this Vector3 _vec)
+    public static Vector2 WorldToScreen(this Vector3 _vec)
     {
         Vector2 reasonableVector = Camera.main.WorldToScreenPoint(_vec);
         reasonableVector.y = -reasonableVector.y;
@@ -25,7 +25,7 @@ public static class Vector3Extended
         {
             typeof(Vector3)
         })]
-    public static Vector3 WorldPosition(this Vector3 _vec)
+    public static Vector3 ScreenToWorld(this Vector3 _vec)
     {
         Vector2 reasonableVector = _vec;
         _vec.y = -_vec.y;
@@ -38,7 +38,7 @@ public static class Vector3Extended
         {
             typeof(Vector3)
         })]
-    public static Vector3 WorldPosition(this Vector2 _vec)
+    public static Vector3 ScreenToWorld(this Vector2 _vec)
     {
         Vector2 reasonableVector = _vec;
         _vec.y = -_vec.y;
