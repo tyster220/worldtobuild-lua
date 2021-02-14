@@ -44,6 +44,38 @@ public class LuaPlayer: LuaObject
         }
     }
 
+    float? originalAddedGravity = null;
+    [BluaProperty(description = "Whether or not this {object} is affected by gravity")]
+    public bool gravityEnabled
+    {
+        get
+        {
+            return _gravityEnabled;
+        }
+        set
+        {
+            if (originalAddedGravity == null)
+            {
+                originalAddedGravity = playerObject.GetComponent<CharacterController>().addedGravity;
+            }
+
+            _gravityEnabled = value;
+
+            if (_gravityEnabled)
+            {
+                playerObject.GetComponent<CharacterController>().addedGravity = originalAddedGravity;
+                playerObject.GetComponent<Rigidbody>().useGravity = true;
+            }
+            else
+            {
+                
+                playerObject.GetComponent<CharacterController>().addedGravity = 0;
+                playerObject.GetComponent<Rigidbody>().useGravity = false;
+            }
+        }
+    }
+    bool _gravityEnabled = true;
+
     [BluaProperty(description = "The network ID of the {object}")]
     public int id
     {
