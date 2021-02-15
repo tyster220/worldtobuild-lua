@@ -447,7 +447,10 @@ public class LuaPlayer: LuaObject
         }
         set
         {
-            playerObject.GetComponentInChildren<Renderer>().enabled = value;
+            foreach (Renderer renderer in playerObject.GetComponentsInChildren<Renderer>())
+            {
+                renderer.enabled = value;
+            }
         }
     }
 
