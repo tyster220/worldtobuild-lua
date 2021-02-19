@@ -1065,6 +1065,32 @@ public class LuaHandler : MonoBehaviour {
         }
     }
 
+
+
+    [BluaMethod(description = "This is called after the screen has fully rendered", scriptSide = ScriptSide.Any)]
+    public void OnPostRender()
+    {
+        if (luaScript.Globals["DoDraw"] != null )
+        {
+            GL.PushMatrix();
+            GL.LoadOrtho();
+
+            LuaGlobalEnvironment.LuaCallOnScript(luaScript, "DoDraw", Task.GetOrMakeLuaPlayer(collision.gameObject));
+
+            GL.PopMatrix();
+        }
+    }
+
+    public void DrawLine(Vector2 _point1, Vector2 _point2, Color _color)
+    {
+        GL.Begin(GL.LINES);
+        GL.Color(_color);
+        GL.Vertex(_point1);
+        GL.Vertex(_point2);
+        GL.End();
+    }
+
+
     [BluaMethod(description = "This is called when your mouse hovers this object", scriptSide = ScriptSide.Client)]
     public void OnMouseEnter()
     {
