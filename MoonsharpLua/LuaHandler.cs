@@ -100,7 +100,7 @@ public static class LuaGlobalEnvironment
 
 
 
-    public static void CallOnScript(LuaScript _luaScript, string _functionName, params object[] _args)
+    public static void CallOnScript(Script _luaScript, string _functionName, params object[] _args)
     {
         if (_luaScript != null && _luaScript.Globals[_functionName] != null)
         {
