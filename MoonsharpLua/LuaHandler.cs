@@ -351,6 +351,7 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals["CreateTimer"] = (System.Action<string, float>)CreateTimer;
 
         luaScript.Globals["RayCast"] = (System.Func<Vector3, Vector3, LuaHitData>)RayCast;
+        luaScript.Globals["MouseRaycast"] = (System.Action<LuaHitData>)MouseRaycast;
 
         luaScript.Globals["NetworkSendToAll"] = (System.Action<string, Table>)NetworkSendToAll;
         luaScript.Globals["NetworkSendToPlayer"] = (System.Action<string, Table, LuaPlayer>)NetworkSendToPlayer;
@@ -641,6 +642,21 @@ public class LuaHandler : MonoBehaviour {
         // dont return a hit structu if they didn't hit anything, there "was no hit"
         return null;
     }
+
+    public LuaHitData MouseRaycast()
+    {
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            return new LuaHitData(hit);
+        }
+
+        return null;
+    }
+
 
     [BluaMethod(description = "Sets an object to have a new parent object", scriptSide = ScriptSide.Server)]
     public void SetParent(LuaWTBObject @object, LuaWTBObject newParent)
