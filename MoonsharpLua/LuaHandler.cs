@@ -643,6 +643,7 @@ public class LuaHandler : MonoBehaviour {
         return null;
     }
 
+    [BluaMethod(description = "Checks for a collision underneath your mouse", scriptSide = ScriptSide.Client)]
     public LuaHitData MouseRaycast()
     {
 
