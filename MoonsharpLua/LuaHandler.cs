@@ -352,7 +352,7 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals["CreateTimer"] = (System.Action<string, float>)CreateTimer;
 
         luaScript.Globals["RayCast"] = (System.Func<Vector3, Vector3, LuaHitData>)RayCast;
-        luaScript.Globals["MouseRaycast"] = (System.Action<LuaHitData>)MouseRaycast;
+        luaScript.Globals["MouseRaycast"] = (System.Func<LuaHitData>)MouseRaycast;
 
         luaScript.Globals["NetworkSendToAll"] = (System.Action<string, Table>)NetworkSendToAll;
         luaScript.Globals["NetworkSendToPlayer"] = (System.Action<string, Table, LuaPlayer>)NetworkSendToPlayer;
@@ -647,7 +647,6 @@ public class LuaHandler : MonoBehaviour {
     [BluaMethod(description = "Checks for a collision underneath your mouse", scriptSide = ScriptSide.Client)]
     public LuaHitData MouseRaycast()
     {
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
