@@ -54,7 +54,7 @@ public class LuaPlayer: LuaObject
 
             if (_gravityEnabled)
             {
-                playerObject.GetComponent<CharacterController>().addedGravity = originalAddedGravity;
+                playerObject.GetComponent<CharacterController>().addedGravity = (float) originalAddedGravity;
                 playerObject.GetComponent<Rigidbody>().useGravity = true;
             }
             else

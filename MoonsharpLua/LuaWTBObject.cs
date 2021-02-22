@@ -7,13 +7,13 @@ using MoonSharp.Interpreter;
 
 public class LuaWTBObject: LuaObject
 {
-
     [MoonSharpHidden] public WTBObject WTBObject;
     //[MoonSharpHidden] public List<WTBComponent> components;
 
     public LuaWTBObject(WTBObject _WTBObject)
     {
         this.type = "Part";
+
         if (_WTBObject != null)
         {
             WTBObject = _WTBObject;
@@ -182,8 +182,6 @@ public class LuaWTBObject: LuaObject
             {
                 scriptHandler.Run();
             }
-
-            
         }
 
         duplicatedWTBOs[0].transform.position = WTBObject.transform.position;
@@ -210,8 +208,8 @@ public class LuaWTBObject: LuaObject
     [BluaMethod(description = "Returns a child by name", scriptSide = ScriptSide.Any)]
     public LuaWTBObject ChildByName(string name)
     {
-
         List<LuaWTBObject> l_transforms = new List<LuaWTBObject>();
+
         foreach (WTBObject wtbo in this.WTBObject.GetChildrenAll())
         {
             LuaWTBObject lwtbo = Task.GetOrMakeLuaPart(wtbo);
@@ -221,6 +219,7 @@ public class LuaWTBObject: LuaObject
                 return lwtbo;
             }
         }
+
         return null;
     }
 
@@ -267,8 +266,7 @@ public class LuaWTBObject: LuaObject
     }
 
 
-    [BluaProperty(description = "Returns the text component on this {object}",
-        deprecated = true, deprecatedMessage = "Please use worldText")]
+    [BluaProperty(description = "Returns the text component on this {object}", deprecated = true, deprecatedMessage = "Please use worldText")]
     public LuaWorldText text
     {
         get
@@ -335,17 +333,6 @@ public class LuaWTBObject: LuaObject
             }
         }
     }
-
-    [BluaProperty(description = "Returns the string text of the script running on this {object}")]
-    public string scriptText
-    {
-        get
-        {
-            return Task.ScriptTextTable[scriptName];
-        }
-    }
-
-
 
     [BluaProperty(description = "Returns the position of this {object}")]
     public Vector3 position
@@ -463,7 +450,7 @@ public class LuaWTBObject: LuaObject
     }
 
     [BluaProperty(description = "Returns the angular velocity of this {object}")]
-    public Vector3 angularvelocity
+    public Vector3 angularVelocity
     {
         get
         {
@@ -568,14 +555,13 @@ public class LuaWTBObject: LuaObject
         }
         set
         {
-            bool val = value;
             WTBObject.Components.ComponentByName("Transform").PropertyByName("CanCollide").dataBool = value;
             WTBObject.StartCoroutine(((PropertyCanCollide)WTBObject.Components.ComponentByName("Transform").PropertyByName("CanCollide")).RefreshDelayed(1));
         }
     }
 
     [BluaProperty(description = "Returns the part type of this {object}")]
-    public int parttype
+    public int partType
     {
         get
         {

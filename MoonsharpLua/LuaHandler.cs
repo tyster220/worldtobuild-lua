@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using MoonSharp;
 using MoonSharp.Interpreter;
 using System;
@@ -298,7 +299,7 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals.Set("Color", col);
         
         luaScript.Options.DebugPrint = s => {
-            Debug.Log("Luaprint: " + s);
+            Debug.Log("Lua Print: " + s);
             Task.consoleControllerGlobal.Print(s);
         };
         
@@ -357,7 +358,7 @@ public class LuaHandler : MonoBehaviour {
         luaScript.Globals["NetworkSendToHost"] = (System.Action<string, Table>)NetworkSendToHost;
 
         luaScript.Globals["HTTPRequestGet"] = (System.Action<string>)HTTPRequestGet;
-        luaScript.Globals["HTTPRequestPost"] = (System.Action<string>)HTTPRequestPost;
+        luaScript.Globals["HTTPRequestPost"] = (System.Action<string, Table>)HTTPRequestPost;
 
         luaScript.Globals["InputPressed"] = (System.Func<string, bool>)InputPressed;
         luaScript.Globals["InputHeld"] = (System.Func<string, bool>)InputHeld;
@@ -987,14 +988,14 @@ public class LuaHandler : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Player")
         {
-            LuaGlobalEnvironment.LuaCallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPlayer(collision.gameObject));
+            LuaGlobalEnvironment.CallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPlayer(collision.gameObject));
         }
         else
         {
             WTBObject WTBO = collision.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                LuaGlobalEnvironment.LuaCallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPart(WTBO));
+                LuaGlobalEnvironment.CallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -1008,14 +1009,14 @@ public class LuaHandler : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Player")
         {
-            LuaGlobalEnvironment.LuaCallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPlayer(collision.gameObject));
+            LuaGlobalEnvironment.CallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPlayer(collision.gameObject));
         }
         else
         {
             WTBObject WTBO = collision.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                LuaGlobalEnvironment.LuaCallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPart(WTBO));
+                LuaGlobalEnvironment.CallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -1032,14 +1033,14 @@ public class LuaHandler : MonoBehaviour {
     {
         if (collider.gameObject.tag == "Player")
         {
-            Task.LuaCallOnScript(this, "StartCollision", Task.GetOrMakeLuaPlayer(collider.gameObject));
+            LuaGlobalEnvironment.CallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPlayer(collider.gameObject));
         }
         else
         {
             WTBObject WTBO = collider.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                Task.LuaCallOnScript(this, "StartCollision", Task.GetOrMakeLuaPart(WTBO));
+                LuaGlobalEnvironment.CallOnScript(luaScript, "StartCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -1053,14 +1054,14 @@ public class LuaHandler : MonoBehaviour {
     {
         if (collider.gameObject.tag == "Player")
         {
-            Task.LuaCallOnScript(this, "EndCollision", Task.GetOrMakeLuaPlayer(collider.gameObject));
+            LuaGlobalEnvironment.CallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPlayer(collider.gameObject));
         }
         else
         {
             WTBObject WTBO = collider.gameObject.GetComponent<WTBObject>();
             if (WTBO != null)
             {
-                Task.LuaCallOnScript(this, "EndCollision", Task.GetOrMakeLuaPart(WTBO));
+                LuaGlobalEnvironment.CallOnScript(luaScript, "EndCollision", Task.GetOrMakeLuaPart(WTBO));
             }
         }
     }
@@ -1070,12 +1071,12 @@ public class LuaHandler : MonoBehaviour {
     [BluaMethod(description = "This is called after the screen has fully rendered", scriptSide = ScriptSide.Any)]
     public void OnPostRender()
     {
-        if (luaScript.Globals["DoDraw"] != null )
+        if (luaScript.Globals["DoDraw"] != null)
         {
             GL.PushMatrix();
             GL.LoadOrtho();
 
-            LuaGlobalEnvironment.LuaCallOnScript(luaScript, "DoDraw", Task.GetOrMakeLuaPlayer(collision.gameObject));
+            LuaGlobalEnvironment.CallOnScript(luaScript, "DoDraw");
 
             GL.PopMatrix();
         }
@@ -1125,18 +1126,18 @@ public class LuaHandler : MonoBehaviour {
         parameterTypes = new System.Type[1]
         {
             typeof(string)
-        })])]
+        })]
     public void HTTPRequestGet(string url)
     {
         StartCoroutine(HTTPRequest("GET", url, null));
     }
 
     [BluaMethod(description = "Sends an HTTP POST to the given URL string. OnWebResponse(string) will be called on return. Table should contain string Key - string Value pairs", scriptSide = ScriptSide.Any,
-        parameterTypes = new System.Type[1]
+        parameterTypes = new System.Type[2]
         {
             typeof(string),
             typeof(Table)
-        })])]
+        })]
     public void HTTPRequestPost(string url, Table _form)
     {
         StartCoroutine(HTTPRequest("POST", url, _form));
@@ -1233,6 +1234,7 @@ public class LuaHitData
         hitPosition = _hit.point;
         hitDistance = _hit.distance;
         hitNormal = _hit.normal;
+
         if (_hit.collider.gameObject.tag == "Part")
         {
             hitObject = Task.GetOrMakeLuaPart(_hit.collider.GetComponent<WTBObject>());
