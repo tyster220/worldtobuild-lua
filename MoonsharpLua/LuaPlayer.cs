@@ -97,6 +97,15 @@ public class LuaPlayer: LuaObject
     }
     public bool _ignoreRaycast = false;
 
+    [BluaProperty(description = "The username of the {object}")]
+    public string username
+    {
+        get
+        {
+            return playerObject.GetComponent<PhotonView>().owner.Username;
+        }
+    }
+
     [BluaProperty(description = "The nickname of the {object}")]
     public string name
     {
@@ -115,7 +124,7 @@ public class LuaPlayer: LuaObject
         }
         set
         {
-            NametagController.instance.SetNametagHidden(playerObject.GetComponent<PhotonView>().owner, value);
+            NametagController.instance.SetNametagHidden(playerObject.GetComponent<PhotonView>().owner, !value);
         }
     }
 
@@ -397,7 +406,10 @@ public class LuaPlayer: LuaObject
         }
         set
         {
-            playerObject.GetComponentInChildren<Renderer>().enabled = value;
+            foreach (Renderer renderer in playerObject.GetComponentsInChildren<Renderer>())
+            {
+                renderer.enabled = value;
+            }
         }
     }
 
@@ -474,6 +486,15 @@ public class LuaPlayer: LuaObject
         if (PhotonNetwork.isMasterClient)
         {
             Task.handler.photonView.RPC("RPCReceiveLuaPlayerBrakingPower", playerObject.GetPhotonView().owner, brakingpower);
+        }
+    }
+
+    [BluaMethod(description = "Respawns the player", scriptSide = ScriptSide.Server)]
+    public void Respawn()
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            Task.handler.photonView.RPC("RPCLuaRespawnPlayer", playerObject.GetPhotonView().owner);
         }
     }
 }

@@ -41,6 +41,7 @@ public static class LuaGlobalEnvironment
 
         UserData.RegisterType<LuaTime>();
         UserData.RegisterType<LuaFile>();
+        UserData.RegisterType<LuaGame>();
 
         UserData.RegisterType<LuaLight>();
         UserData.RegisterType<LuaParticleSystem>();
@@ -59,6 +60,7 @@ public static class LuaGlobalEnvironment
         UserData.RegisterType<Vector3>();
         UserData.RegisterType<Vector4>();
         UserData.RegisterType<Color>();
+        UserData.RegisterType<Color32>();
 
         UserData.RegisterType<AccessibleLuaScript>();
 
@@ -254,7 +256,10 @@ public class LuaHandler : MonoBehaviour {
         
         DynValue col = UserData.Create(new Color());
         luaScript.Globals.Set("Color", col);
-        
+
+        DynValue col32 = UserData.Create(new Color32());
+        luaScript.Globals.Set("Color32", col32);
+
         luaScript.Options.DebugPrint = s => {
             Debug.Log("Luaprint: " + s);
             Task.consoleControllerGlobal.Print(s);
@@ -266,6 +271,7 @@ public class LuaHandler : MonoBehaviour {
 
         luaScript.Globals["Time"] = new LuaTime();
         luaScript.Globals["File"] = new LuaFile();
+        luaScript.Globals["Game"] = new LuaGame();
 
         luaScript.Globals["newVector2"] = (System.Func<float, float, Vector2>)newVector2;
         luaScript.Globals["newVector3"] = (System.Func<float, float, float, Vector3>)newVector3;
@@ -359,20 +365,15 @@ public class LuaHandler : MonoBehaviour {
     [BluaMethod(description = "Creates a talk message in the chat from the world", scriptSide = ScriptSide.Client)]
     public void CreateTalkMessage(string message)
     {
-        if (!PhotonNetwork.isMasterClient) return;
-
         TalkController.instance.RecieveTalkMessage(message, TalkController.MessageType.Developer);
     }
 
-    [BluaMethod(description = "Creates a talk message in the chat from the world for a specific player", scriptSide = ScriptSide.Client)]
+    [BluaMethod(description = "Creates a talk message in the chat from the world for a specific player", scriptSide = ScriptSide.Server)]
     public void CreateTalkMessageFor(LuaPlayer player, string message)
     {
         if (!PhotonNetwork.isMasterClient) return;
 
-        if (player.playerConnection == PhotonNetwork.player) // if we're the player targeted
-        {
-            TalkController.instance.RecieveTalkMessage(message, TalkController.MessageType.Developer);
-        }
+        Task.handler.photonView.RPC("RPCLuaRecieveTalkMessage", player.playerConnection, message);
     }
 
     [BluaMethod(description = "Converts a table to a json string", scriptSide = ScriptSide.Any)]
@@ -961,6 +962,27 @@ public class LuaHandler : MonoBehaviour {
         }
     }
 
+    [BluaMethod(description = "This is called when another object stays colliding with this one", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(LuaWTBObject)
+        })]
+    public void OnCollisionStay(Collision collision)
+    {
+        if (luaScript != null && luaScript.Globals["ContinueCollision"] != null)
+        {
+            WTBObject WTBO = collision.gameObject.GetComponent<WTBObject>();
+            if (WTBO != null)
+            {
+                luaScript.Call(luaScript.Globals["ContinueCollision"], Task.GetOrMakeLuaPart(WTBO));
+            }
+            else if (collision.gameObject.tag == "Player")
+            {
+                luaScript.Call(luaScript.Globals["ContinueCollision"], Task.GetOrMakeLuaPlayer(collision.gameObject));
+            }
+        }
+    }
+
     [BluaMethod(description = "This is called when another object stops colliding with this one", scriptSide = ScriptSide.Any,
         parameterTypes = new System.Type[1]
         {
@@ -1002,6 +1024,27 @@ public class LuaHandler : MonoBehaviour {
             else if (collider.gameObject.tag == "Player")
             {
                 luaScript.Call(luaScript.Globals["StartCollision"], Task.GetOrMakeLuaPlayer(collider.gameObject));
+            }
+        }
+    }
+
+    [BluaMethod(description = "This is called when another object stays in the same space as this one", scriptSide = ScriptSide.Any,
+        parameterTypes = new System.Type[1]
+        {
+            typeof(LuaWTBObject)
+        })]
+    public void OnTriggerStay(Collider collider)
+    {
+        if (luaScript != null && luaScript.Globals["ContinueCollision"] != null)
+        {
+            WTBObject WTBO = collider.gameObject.GetComponent<WTBObject>();
+            if (WTBO != null)
+            {
+                luaScript.Call(luaScript.Globals["ContinueCollision"], Task.GetOrMakeLuaPart(WTBO));
+            }
+            else if (collider.gameObject.tag == "Player")
+            {
+                luaScript.Call(luaScript.Globals["ContinueCollision"], Task.GetOrMakeLuaPlayer(collider.gameObject));
             }
         }
     }
